@@ -1,0 +1,54 @@
+{
+  "permissions": [
+    { "resource": "users", "action": "read", "description": "Read users" },
+    { "resource": "users", "action": "list", "description": "List users" },
+    { "resource": "users", "action": "create", "description": "Create users" },
+    { "resource": "roles", "action": "read", "description": "Read roles" },
+    { "resource": "roles", "action": "list", "description": "List roles" },
+    { "resource": "roles", "action": "create", "description": "Create roles" },
+    {
+      "resource": "organizations",
+      "action": "update",
+      "description": "Update organization status"
+    }
+  ],
+  "roles": [
+    {
+      "name": "PLATFORM_ADMIN",
+      "description": "Full platform administrator with global access",
+      "permissions": ["*"],
+      "scope": "global"
+    },
+    {
+      "name": "SUPPLIER",
+      "description": "Organization supplier with limited access",
+      "permissions": [
+        "users:read",
+        "users:create",
+        "roles:read",
+        "roles:create"
+      ],
+      "scope": "organization"
+    }
+  ],
+  "users": [
+    {
+      "fullName": "Super Admin User",
+      "phones": [{ "number": "+918617662584", "isVerified": true }],
+      "emails": [{ "email": "superadmin@example.com", "isVerified": true }],
+      "password": "superAdmin@2025",
+      "role": "PLATFORM_ADMIN",
+      "status": "active",
+      "profilePhotoUrl": ""
+    },
+    {
+      "fullName": "Supplier User",
+      "phones": [{ "number": "+911234567890", "isVerified": true }],
+      "emails": [{ "email": "supplier@example.com", "isVerified": true }],
+      "password": "supplier@2025",
+      "role": "SUPPLIER",
+      "status": "active",
+      "profilePhotoUrl": ""
+    }
+  ]
+}

@@ -1,0 +1,2743 @@
+basePath: /api/v1
+definitions:
+  dto.AddressDto:
+    properties:
+      city:
+        example: Siliguri
+        type: string
+      country:
+        example: India
+        type: string
+      pincode:
+        example: "734001"
+        type: string
+      state:
+        example: West Bengal
+        type: string
+      street:
+        example: 123 Main Street, Building A
+        type: string
+    type: object
+  dto.CoordinatesDto:
+    properties:
+      lat:
+        example: 26.727
+        type: number
+      lng:
+        example: 88.395
+        type: number
+    type: object
+  dto.CreateLocationDto:
+    properties:
+      aliases:
+        items:
+          type: string
+        type: array
+      coordinates:
+        allOf:
+        - $ref: '#/definitions/dto.CoordinatesDto'
+        description: Optional fields
+      country:
+        example: India
+        type: string
+      description:
+        type: string
+      district:
+        example: Darjeeling
+        type: string
+      geojson: {}
+      mediaUrls:
+        $ref: '#/definitions/dto.MediaUrlsDto'
+      name:
+        description: Required fields
+        example: Siliguri
+        type: string
+      pincode:
+        example: "734001"
+        type: string
+      state:
+        example: West Bengal
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      type:
+        allOf:
+        - $ref: '#/definitions/dto.LocationType'
+        example: city
+    required:
+    - country
+    - district
+    - name
+    - pincode
+    - state
+    - type
+    type: object
+  dto.CreateOrganizationDto:
+    properties:
+      address:
+        $ref: '#/definitions/dto.AddressDto'
+      email:
+        example: contact@wecareholidays.com
+        type: string
+      logo:
+        example: https://storage.example.com/logos/wecare.png
+        type: string
+      name:
+        description: Required fields
+        example: WeCare Holidays
+        type: string
+      phone:
+        example: +91 1234567890
+        type: string
+      slug:
+        description: Optional fields
+        example: wecare-holidays
+        type: string
+      status:
+        description: If not provided, defaults to "Pending"
+        example: Approved
+        type: string
+      taxIds:
+        example:
+        - '[''GST123456'''
+        - ' ''PAN1234567'']'
+        items:
+          type: string
+        type: array
+      type:
+        description: SUPPLIER, TRAVEL_AGENT, PLATFORM
+        example: SUPPLIER
+        type: string
+      website:
+        example: https://www.wecareholidays.com
+        type: string
+    required:
+    - email
+    - name
+    - type
+    type: object
+  dto.CreatePermissionDto:
+    properties:
+      action:
+        example: read
+        type: string
+      resource:
+        example: organizations
+        type: string
+    required:
+    - action
+    - resource
+    type: object
+  dto.CreateRoleDto:
+    properties:
+      description:
+        example: Administrator role with full access
+        type: string
+      name:
+        description: Required fields
+        example: Admin
+        type: string
+      permissions:
+        example:
+        - 507f1f77bcf86cd799439011
+        - ' 507f1f77bcf86cd799439012'
+        items:
+          type: string
+        type: array
+      scope:
+        description: Optional fields
+        example: organizations
+        type: string
+    required:
+    - description
+    - name
+    type: object
+  dto.CreateUserDto:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      fullName:
+        example: John Doe
+        type: string
+      organizationId:
+        example: 507f1f77bcf86cd799439012
+        type: string
+      phone:
+        example: "+919876543210"
+        type: string
+      profilePhotoUrl:
+        example: https://example.com/photo.jpg
+        type: string
+      roleId:
+        example: 507f1f77bcf86cd799439011
+        type: string
+      status:
+        example: Active
+        type: string
+    required:
+    - email
+    - fullName
+    - roleId
+    type: object
+  dto.LocationType:
+    enum:
+    - city
+    - scenic_spot
+    - transit_hub
+    - district
+    - village
+    - region
+    type: string
+    x-enum-varnames:
+    - City
+    - ScenicSpot
+    - TransitHub
+    - District
+    - Village
+    - Region
+  dto.MediaUrlsDto:
+    properties:
+      photos:
+        items:
+          type: string
+        type: array
+      videos:
+        items:
+          type: string
+        type: array
+    type: object
+  dto.PaginatedLocationsResponse:
+    properties:
+      includeDeleted:
+        example: false
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/entity.Location'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 2
+        type: integer
+      totalPages:
+        example: 1
+        type: integer
+    type: object
+  dto.PaginatedOrganizationsResponse:
+    properties:
+      includeDeleted:
+        example: false
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/entity.Organization'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 2
+        type: integer
+      totalPages:
+        example: 1
+        type: integer
+    type: object
+  dto.PaginatedPermissionsResponse:
+    properties:
+      includeDeleted:
+        example: false
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/entity.Permission'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 2
+        type: integer
+      totalPages:
+        example: 1
+        type: integer
+    type: object
+  dto.PaginatedRolesResponse:
+    properties:
+      includeDeleted:
+        example: false
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/entity.Role'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 2
+        type: integer
+      totalPages:
+        example: 1
+        type: integer
+    type: object
+  dto.PaginatedUsersResponse:
+    properties:
+      includeDeleted:
+        example: false
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/entity.User'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 2
+        type: integer
+      totalPages:
+        example: 1
+        type: integer
+    type: object
+  dto.UpdateLocationDto:
+    properties:
+      aliases:
+        items:
+          type: string
+        type: array
+      coordinates:
+        $ref: '#/definitions/dto.CoordinatesDto'
+      country:
+        type: string
+      description:
+        type: string
+      district:
+        type: string
+      geojson: {}
+      mediaUrls:
+        $ref: '#/definitions/dto.MediaUrlsDto'
+      name:
+        type: string
+      pincode:
+        type: string
+      state:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      type:
+        $ref: '#/definitions/dto.LocationType'
+    type: object
+  dto.UpdateOrganizationDto:
+    properties:
+      address:
+        $ref: '#/definitions/dto.AddressDto'
+      email:
+        type: string
+      logo:
+        type: string
+      name:
+        description: All fields are pointers to distinguish between nil (not provided)
+          and empty values
+        type: string
+      phone:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+      taxIds:
+        items:
+          type: string
+        type: array
+      type:
+        type: string
+      website:
+        type: string
+    type: object
+  dto.UpdatePermissionDto:
+    properties:
+      action:
+        type: string
+      resource:
+        type: string
+    type: object
+  dto.UpdateRoleDto:
+    properties:
+      description:
+        type: string
+      name:
+        description: All fields are pointers to distinguish between nil (not provided)
+          and empty values
+        type: string
+      permissions:
+        items:
+          type: string
+        type: array
+    type: object
+  dto.UpdateUserDto:
+    properties:
+      emails:
+        description: Array of email strings
+        items:
+          type: string
+        type: array
+      fullName:
+        type: string
+      organizationId:
+        type: string
+      phones:
+        description: Array of phone strings
+        items:
+          type: string
+        type: array
+      profilePhotoUrl:
+        type: string
+      roleId:
+        type: string
+      status:
+        type: string
+    type: object
+  entity.Address:
+    description: Physical address information
+    properties:
+      city:
+        description: City name
+        example: Siliguri
+        type: string
+      country:
+        description: Country name
+        example: India
+        type: string
+      pincode:
+        description: Postal/ZIP code
+        example: "734001"
+        type: string
+      state:
+        description: State or province
+        example: West Bengal
+        type: string
+      street:
+        description: Street address including building/apartment
+        example: 123 Main Street, Building A
+        type: string
+    type: object
+  entity.AuditTrail:
+    properties:
+      lastLoginAt:
+        type: string
+      lastLoginDevice:
+        type: string
+      lastLoginIp:
+        type: string
+    type: object
+  entity.Coordinates:
+    properties:
+      lat:
+        type: number
+      lng:
+        type: number
+    type: object
+  entity.Email:
+    properties:
+      email:
+        description: Email address
+        type: string
+      isVerified:
+        description: Verification status
+        type: boolean
+    type: object
+  entity.Location:
+    properties:
+      aliases:
+        items:
+          type: string
+        type: array
+      coordinates:
+        $ref: '#/definitions/entity.Coordinates'
+      country:
+        type: string
+      createdAt:
+        type: string
+      createdBy:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      district:
+        type: string
+      geojson: {}
+      id:
+        type: string
+      mediaUrls:
+        $ref: '#/definitions/entity.MediaURLs'
+      name:
+        type: string
+      pincode:
+        type: string
+      state:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+      type:
+        description: city | scenic_spot | ...
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  entity.MediaURLs:
+    properties:
+      photos:
+        items:
+          type: string
+        type: array
+      videos:
+        items:
+          type: string
+        type: array
+    type: object
+  entity.Organization:
+    description: Organization entity representing clients, suppliers, or travel agents
+    properties:
+      address:
+        allOf:
+        - $ref: '#/definitions/entity.Address'
+        description: Physical address
+      createdAt:
+        description: Creation timestamp
+        type: string
+      deletedAt:
+        description: Soft delete timestamp
+        type: string
+      email:
+        description: Primary contact email
+        example: contact@wecareholidays.com
+        type: string
+      id:
+        description: Unique identifier for the organization
+        example: 5f8d0c1b7ea3f0d0f3c8e1b9
+        type: string
+      logo:
+        description: URL to organization logo
+        example: https://storage.example.com/logos/wecare.png
+        type: string
+      name:
+        description: Organization name
+        example: WeCare Holidays
+        type: string
+      phone:
+        description: Contact phone number
+        example: +91 1234567890
+        type: string
+      slug:
+        description: URL-friendly version of name
+        example: wecare-holidays
+        type: string
+      status:
+        description: Current status (Pending, Approved, Suspended, Archived)
+        example: Approved
+        type: string
+      taxIds:
+        description: Tax identification numbers
+        example:
+        - '[''GST123456'''
+        - ' ''PAN1234567'']'
+        items:
+          type: string
+        type: array
+      type:
+        description: Organization type (SUPPLIER, TRAVEL_AGENT, PLATFORM)
+        example: SUPPLIER
+        type: string
+      updatedAt:
+        description: Last update timestamp
+        type: string
+      website:
+        description: Organization website URL
+        example: https://www.wecareholidays.com
+        type: string
+    type: object
+  entity.Permission:
+    properties:
+      _id:
+        type: string
+      action:
+        allOf:
+        - $ref: '#/definitions/entity.PermissionAction'
+        description: e.g., "read", "create"
+      createdAt:
+        type: string
+      description:
+        description: Human-readable description
+        type: string
+      resource:
+        description: e.g., "users", "roles"
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  entity.PermissionAction:
+    enum:
+    - read
+    - write
+    - create
+    - update
+    - delete
+    type: string
+    x-enum-varnames:
+    - PermissionActionRead
+    - PermissionActionWrite
+    - PermissionActionCreate
+    - PermissionActionUpdate
+    - PermissionActionDelete
+  entity.Phone:
+    properties:
+      isVerified:
+        description: Verification status
+        type: boolean
+      number:
+        description: Phone number (E.164)
+        type: string
+    type: object
+  entity.Role:
+    properties:
+      _id:
+        type: string
+      createdAt:
+        type: string
+      createdBy:
+        description: User ID who created this role
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      isSystem:
+        type: boolean
+      name:
+        type: string
+      permissions:
+        description: Permission IDs
+        items:
+          type: string
+        type: array
+      scope:
+        $ref: '#/definitions/entity.RoleScope'
+      updatedAt:
+        type: string
+    type: object
+  entity.RoleScope:
+    enum:
+    - global
+    - organization
+    - self
+    type: string
+    x-enum-comments:
+      RoleScopeGlobal: Can access all data across all organizations
+      RoleScopeOrganization: Can access data within their organization only
+      RoleScopeSelf: Can access only their own data
+    x-enum-varnames:
+    - RoleScopeGlobal
+    - RoleScopeOrganization
+    - RoleScopeSelf
+  entity.User:
+    properties:
+      _id:
+        type: string
+      auditTrail:
+        $ref: '#/definitions/entity.AuditTrail'
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      emails:
+        items:
+          $ref: '#/definitions/entity.Email'
+        type: array
+      fullName:
+        type: string
+      organizationId:
+        type: string
+      password:
+        type: string
+      phones:
+        items:
+          $ref: '#/definitions/entity.Phone'
+        type: array
+      profilePhotoUrl:
+        type: string
+      role:
+        description: For convenience
+        type: string
+      roleId:
+        type: string
+      status:
+        $ref: '#/definitions/entity.UserStatus'
+      updatedAt:
+        type: string
+    type: object
+  entity.UserStatus:
+    enum:
+    - Invited
+    - Active
+    - Suspended
+    - Removed
+    type: string
+    x-enum-varnames:
+    - UserStatusInvited
+    - UserStatusActive
+    - UserStatusSuspended
+    - UserStatusRemoved
+  models.BulkDeleteDto:
+    properties:
+      ids:
+        items:
+          type: string
+        type: array
+    required:
+    - ids
+    type: object
+  models.BulkDeleteResponse:
+    properties:
+      deletedCount:
+        example: 1
+        type: integer
+      deletedIds:
+        example:
+        - 6835bf49c62fee1db6585e9f
+        items:
+          type: string
+        type: array
+      invalidIds:
+        example:
+        - 683467a32bf5a05aefe43cb
+        items:
+          type: string
+        type: array
+      message:
+        example: Roles deletion processed
+        type: string
+      notFoundIds:
+        example:
+        - 68344ada06017a47db237f66
+        items:
+          type: string
+        type: array
+      requestedIds:
+        example:
+        - 6835bf49c62fee1db6585e9f
+        - ' 683467a32bf5a05aefe43cb'
+        - ' 68344ada06017a47db237f66'
+        items:
+          type: string
+        type: array
+    type: object
+  models.BulkRestoreResponse:
+    properties:
+      invalidIds:
+        example:
+        - 683467a32bf5a05aefe43cb
+        items:
+          type: string
+        type: array
+      message:
+        example: Roles restoration processed
+        type: string
+      notFoundIds:
+        example:
+        - 68344ada06017a47db237f66
+        items:
+          type: string
+        type: array
+      requestedIds:
+        example:
+        - 6835bf49c62fee1db6585e9f
+        - ' 683467a32bf5a05aefe43cb'
+        - ' 68344ada06017a47db237f66'
+        items:
+          type: string
+        type: array
+      restoredCount:
+        example: 1
+        type: integer
+      restoredIds:
+        example:
+        - 6835bf49c62fee1db6585e9f
+        items:
+          type: string
+        type: array
+    type: object
+  models.SwaggerErrorResponse:
+    description: Error response model
+    properties:
+      data:
+        description: Optional error details
+      errorMessage:
+        description: Human-readable error message
+        example: Invalid request parameters
+        type: string
+      statusCode:
+        description: HTTP status code
+        example: 400
+        type: integer
+      success:
+        description: Indicates request failure
+        example: false
+        type: boolean
+    type: object
+  models.SwaggerStandardResponse:
+    description: Standard API response format
+    properties:
+      data:
+        description: Response payload
+      errorMessage:
+        description: Error message (only present if success is false)
+        example: ""
+        type: string
+      statusCode:
+        description: HTTP status code
+        example: 200
+        type: integer
+      success:
+        description: Indicates whether the request was successful
+        example: true
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@wecareholidays.com
+    name: API Support
+    url: http://www.wecareholidays.com/support
+  description: API Server for WeCare Holidays applications
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: WeCare Holidays API
+  version: "1.0"
+paths:
+  /locations:
+    get:
+      consumes:
+      - application/json
+      description: Get all locations with pagination and filtering
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        maximum: 100
+        name: limit
+        type: integer
+      - description: Filter by name (partial match, case-insensitive)
+        in: query
+        name: name
+        type: string
+      - description: Filter by organization type (exact match)
+        in: query
+        name: type
+        type: string
+      - description: Filter by state (partial match, case-insensitive)
+        in: query
+        name: state
+        type: string
+      - description: Filter by country (partial match, case-insensitive)
+        in: query
+        name: country
+        type: string
+      - collectionFormat: csv
+        description: Filter by tags (exact match, any)
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      - collectionFormat: csv
+        description: Filter by aliases (exact match, any)
+        in: query
+        items:
+          type: string
+        name: aliases
+        type: array
+      - default: false
+        description: Include soft-deleted locations
+        in: query
+        name: includeDeleted
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with paginated locations
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PaginatedLocationsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: List locations
+      tags:
+      - locations
+    post:
+      consumes:
+      - application/json
+      description: Create a new location with the provided data
+      parameters:
+      - description: Location data
+        in: body
+        name: location
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateLocationDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Location'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Create a new location
+      tags:
+      - locations
+  /locations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete a location by ID (marks as deleted but keeps in database)
+      parameters:
+      - description: Location ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete a location
+      tags:
+      - locations
+    get:
+      consumes:
+      - application/json
+      description: Get single location by its ID
+      parameters:
+      - description: Location ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Location'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Get location by ID
+      tags:
+      - locations
+    put:
+      consumes:
+      - application/json
+      description: Update a location by ID with provided data
+      parameters:
+      - description: Location ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Location data to update
+        in: body
+        name: location
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateLocationDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Location'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Update an existing location
+      tags:
+      - locations
+  /locations/{id}/hard-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Permanently delete a location by ID (removes it from the database)
+      parameters:
+      - description: Location ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Permanently delete a location
+      tags:
+      - locations
+  /locations/{id}/restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore a soft-deleted location by ID (clears the deletedAt timestamp)
+      parameters:
+      - description: Location ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Location'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore a deleted location
+      tags:
+      - locations
+  /locations/bulk-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete multiple locations by their IDs
+      parameters:
+      - description: IDs to delete
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkDeleteResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete multiple locations
+      tags:
+      - locations
+  /locations/bulk-restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore multiple soft-deleted locations by their IDs
+      parameters:
+      - description: IDs to restore
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkRestoreResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore multiple deleted locations
+      tags:
+      - locations
+  /organizations:
+    get:
+      consumes:
+      - application/json
+      description: Get all organizations with pagination and filtering
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        maximum: 100
+        name: limit
+        type: integer
+      - description: Filter by name (partial match, case-insensitive)
+        in: query
+        name: name
+        type: string
+      - description: Filter by slug (partial match, case-insensitive)
+        in: query
+        name: slug
+        type: string
+      - description: Filter by organization type (exact match)
+        in: query
+        name: type
+        type: string
+      - description: Filter by status (exact match)
+        in: query
+        name: status
+        type: string
+      - description: Filter by email (partial match, case-insensitive)
+        in: query
+        name: email
+        type: string
+      - description: Filter by phone number (partial match, case-insensitive)
+        in: query
+        name: phone
+        type: string
+      - description: Filter by website (partial match, case-insensitive)
+        in: query
+        name: website
+        type: string
+      - description: Filter by city (partial match, case-insensitive)
+        in: query
+        name: city
+        type: string
+      - description: Filter by state (partial match, case-insensitive)
+        in: query
+        name: state
+        type: string
+      - description: Filter by country (partial match, case-insensitive)
+        in: query
+        name: country
+        type: string
+      - default: false
+        description: Include soft-deleted organizations
+        in: query
+        name: includeDeleted
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with paginated organizations
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PaginatedOrganizationsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: List organizations
+      tags:
+      - organizations
+    post:
+      consumes:
+      - application/json
+      description: Create a new organization with the provided data
+      parameters:
+      - description: Organization data
+        in: body
+        name: organization
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateOrganizationDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Create a new organization
+      tags:
+      - organizations
+  /organizations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete an organization by ID (marks as deleted but keeps in
+        database)
+      parameters:
+      - description: Organization ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete an organization
+      tags:
+      - organizations
+    get:
+      consumes:
+      - application/json
+      description: Get single organization by its ID
+      parameters:
+      - description: Organization ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Get organization by ID
+      tags:
+      - organizations
+    put:
+      consumes:
+      - application/json
+      description: Update an existing organization by ID with partial data
+      parameters:
+      - description: Organization ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Organization data to update
+        in: body
+        name: organization
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateOrganizationDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Update an organization
+      tags:
+      - organizations
+  /organizations/{id}/hard-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Hard-delete an organization by ID (permanently removes from database)
+      parameters:
+      - description: Organization ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Permanently delete an organization
+      tags:
+      - organizations
+  /organizations/{id}/logo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a new logo for an organization and update its record
+      parameters:
+      - description: Organization ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Logo image file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated organization
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Organization not found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "413":
+          description: File too large
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Upload organization logo
+      tags:
+      - organizations
+  /organizations/{id}/restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore a soft-deleted organization
+      parameters:
+      - description: Organization ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore a deleted organization
+      tags:
+      - organizations
+  /organizations/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Update the status of an organization
+      parameters:
+      - description: Organization ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Organization'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Update organization status
+      tags:
+      - organizations
+  /organizations/bulk-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete multiple organizations by their IDs
+      parameters:
+      - description: IDs to delete
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkDeleteResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete multiple organizations
+      tags:
+      - organizations
+  /organizations/bulk-restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore multiple soft-deleted organizations by their IDs
+      parameters:
+      - description: IDs to restore
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkRestoreResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore multiple deleted organizations
+      tags:
+      - organizations
+  /permissions:
+    get:
+      consumes:
+      - application/json
+      description: Get all permissions with pagination and filtering
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        maximum: 100
+        name: limit
+        type: integer
+      - description: Filter by name (partial match, case-insensitive)
+        in: query
+        name: name
+        type: string
+      - description: Filter by description (partial match, case-insensitive)
+        in: query
+        name: description
+        type: string
+      - description: Filter by resource (exact match)
+        in: query
+        name: resource
+        type: string
+      - description: Filter by action (exact match)
+        in: query
+        name: action
+        type: string
+      - default: false
+        description: Include soft-deleted permissions
+        in: query
+        name: includeDeleted
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with paginated permissions
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PaginatedPermissionsResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: List permissions
+      tags:
+      - permissions
+    post:
+      consumes:
+      - application/json
+      description: Creates a new permission with the provided details
+      parameters:
+      - description: Permission creation data
+        in: body
+        name: permission
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreatePermissionDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Permission'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Create a new permission
+      tags:
+      - permissions
+  /permissions/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a single permission by its unique identifier
+      parameters:
+      - description: Permission ID
+        example: '"6824886e6b180b753cea43e9"'
+        format: objectid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Permission'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Get a permission by ID
+      tags:
+      - permissions
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing permission with the provided details
+      parameters:
+      - description: Permission ID
+        format: objectid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Permission update data
+        in: body
+        name: permission
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePermissionDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Permission'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Update an existing permission
+      tags:
+      - permissions
+  /permissions/{id}/hard-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Permanently deletes a permission from the database (cannot be undone)
+      parameters:
+      - description: Permission ID
+        format: objectid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Permanently delete a permission
+      tags:
+      - permissions
+  /roles:
+    get:
+      consumes:
+      - application/json
+      description: Get all roles with pagination and filtering
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Items per page
+        in: query
+        maximum: 100
+        name: limit
+        type: integer
+      - description: Filter by name (partial match, case-insensitive)
+        in: query
+        name: name
+        type: string
+      - description: Filter roles that have permissions (true) or no permissions (false)
+        in: query
+        name: hasPermissions
+        type: boolean
+      - description: If true, role must have ALL specified permissions; if false,
+          role must have ANY
+        in: query
+        name: hasAllPermissions
+        type: boolean
+      - description: Search in role name and description (case-insensitive)
+        in: query
+        name: searchTerm
+        type: string
+      - default: false
+        description: Include soft-deleted roles
+        in: query
+        name: includeDeleted
+        type: boolean
+      - description: Filter by exact permission count
+        in: query
+        name: permissionCount
+        type: integer
+      - description: Filter by minimum permission count
+        in: query
+        name: minPermissionCount
+        type: integer
+      - description: Filter by maximum permission count
+        in: query
+        name: maxPermissionCount
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with paginated roles
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PaginatedRolesResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: List roles
+      tags:
+      - roles
+    post:
+      consumes:
+      - application/json
+      description: Create a new role with the provided data
+      parameters:
+      - description: Role data
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateRoleDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Role'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Create a new role
+      tags:
+      - roles
+  /roles/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete a role by ID (marks as deleted but keeps in database)
+      parameters:
+      - description: Role ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete a role
+      tags:
+      - roles
+    get:
+      consumes:
+      - application/json
+      description: Get single role by its ID
+      parameters:
+      - description: role ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Role'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Get role by ID
+      tags:
+      - roles
+    put:
+      consumes:
+      - application/json
+      description: Update a role by ID with provided data
+      parameters:
+      - description: Role ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Role data to update
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateRoleDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Role'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Update an existing role
+      tags:
+      - roles
+  /roles/{id}/hard-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Permanently delete a role by ID (removes it from the database)
+      parameters:
+      - description: Role ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Permanently delete a role
+      tags:
+      - roles
+  /roles/{id}/restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore a soft-deleted role by ID (clears the deletedAt timestamp)
+      parameters:
+      - description: Role ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Role'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore a deleted role
+      tags:
+      - roles
+  /roles/bulk-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete multiple roles by their IDs
+      parameters:
+      - description: IDs to delete
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkDeleteResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete multiple roles
+      tags:
+      - roles
+  /roles/bulk-restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore multiple soft-deleted roles by their IDs
+      parameters:
+      - description: IDs to restore
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkRestoreResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore multiple deleted roles
+      tags:
+      - roles
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users with pagination and filtering
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page
+        in: query
+        maximum: 100
+        name: limit
+        type: integer
+      - description: Filter by full name (partial match, case-insensitive)
+        in: query
+        name: fullName
+        type: string
+      - description: Filter by email (partial match, case-insensitive)
+        in: query
+        name: email
+        type: string
+      - description: Filter by phone number (partial match, case-insensitive)
+        in: query
+        name: phone
+        type: string
+      - description: Filter by status (exact match)
+        in: query
+        name: status
+        type: string
+      - description: Filter by role ID (exact match)
+        in: query
+        name: roleId
+        type: string
+      - description: Filter by organization ID (exact match)
+        in: query
+        name: organizationId
+        type: string
+      - description: Search across name, email, and phone
+        in: query
+        name: search
+        type: string
+      - default: false
+        description: Include soft-deleted users
+        in: query
+        name: includeDeleted
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PaginatedUsersResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: List users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided data
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateUserDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Create a new user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete a user by ID (marks as deleted but keeps in database)
+      parameters:
+      - description: User ID
+        example: '"507f1f77bcf86cd799439011"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete a user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get single user by its ID
+      parameters:
+      - description: User ID
+        example: '"507f1f77bcf86cd799439011"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update an existing user by ID with partial data
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User data to update
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Update a user
+      tags:
+      - users
+  /users/{id}/hard-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Hard-delete a user by ID (permanently removes from database)
+      parameters:
+      - description: User ID
+        example: '"507f1f77bcf86cd799439011"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Permanently delete a user
+      tags:
+      - users
+  /users/{id}/profile-photo:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a new profile photo for an user and update its record
+      parameters:
+      - description: User ID
+        example: '"6824886e6b180b753cea43e9"'
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Logo image file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated user
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "413":
+          description: File too large
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Upload user profile photo
+      tags:
+      - users
+  /users/{id}/restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore a soft-deleted user
+      parameters:
+      - description: User ID
+        example: '"507f1f77bcf86cd799439011"'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.User'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore a deleted user
+      tags:
+      - users
+  /users/bulk-delete:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete multiple users by their IDs
+      parameters:
+      - description: IDs to delete
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkDeleteResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Delete multiple users
+      tags:
+      - users
+  /users/bulk-restore:
+    post:
+      consumes:
+      - application/json
+      description: Restore multiple soft-deleted users by their IDs
+      parameters:
+      - description: IDs to restore
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BulkDeleteDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SwaggerStandardResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.BulkRestoreResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.SwaggerErrorResponse'
+      summary: Restore multiple deleted users
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,81 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: wecare-holidays-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    container_name: wecare-holidays-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  seeder:
+    container_name: wecare-holidays-seeder
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: ./wecare-holidays-seeder --force
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: "no"
+    networks:
+      - app-network
+
+
+  app:
+    container_name: wecare-holidays-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ./main
+    ports:
+      - "8080:8080"
+    depends_on:
+      seeder:
+        condition: service_completed_successfully
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    volumes:
+      - ./configs:/root/configs
+      - ./.env:/root/.env
+    networks:
+      - app-network
+
+
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  redis_data:
