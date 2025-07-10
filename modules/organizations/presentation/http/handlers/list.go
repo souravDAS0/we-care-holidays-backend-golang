@@ -3,9 +3,12 @@ package handlers
 import (
 	"net/http"
 
+	"bitbucket.org/abhishek_fordel/we-care-holidays-backend-golang/internal/logger"
 	"bitbucket.org/abhishek_fordel/we-care-holidays-backend-golang/internal/middleware"
 	"bitbucket.org/abhishek_fordel/we-care-holidays-backend-golang/modules/organizations/presentation/http/dto"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
 )
 
 // ListOrganizations godoc
@@ -33,16 +36,50 @@ import (
 //	@Failure		500				{object}	models.SwaggerErrorResponse
 //	@Router			/organizations [get]
 func (h *OrganizationHandler) ListOrganizations(c *gin.Context) {
+	// Get scoped RBAC context
+	rbacContext, err := middleware.GetScopedRBACContext(c)
+	if err != nil {
+		logger.Log.Error("Failed to get scoped RBAC context", zap.Error(err))
+		middleware.HandleError(c, middleware.NewAppError(
+			middleware.ErrorCodeInternalServer,
+			"Access control error",
+			err,
+			http.StatusInternalServerError,
+		))
+		return
+	}
+
 	// Parse query parameters using DTO
 	queryDto := dto.NewGetOrganizationsDto(c)
+
+	// Get base filter from DTO
+	filter := queryDto.ToFilterMap()
+
+	// Apply organization scoping for non-global admins
+	if !rbacContext.IsGlobalAdmin {
+		// Suppliers can only see their own organization
+		// Use _id for MongoDB ObjectID filtering
+		organizationId, _ := primitive.ObjectIDFromHex(rbacContext.OrganizationID)
+		filter["_id"] = organizationId
+		logger.Log.Debug("Applied organization filter for non-admin user",
+			zap.String("user_id", rbacContext.UserID),
+			zap.String("organization_id", rbacContext.OrganizationID))
+	}
+
+	logger.Log.Debug("Listing organizations with filters",
+		zap.Any("filter", filter),
+		zap.Int("page", queryDto.Page),
+		zap.Int("limit", queryDto.Limit),
+		zap.Bool("is_global_admin", rbacContext.IsGlobalAdmin))
 
 	// Call use case with filter from DTO
 	organizations, total, err := h.ListOrganizationUseCase.Execute(
 		c.Request.Context(),
-		queryDto.ToFilterMap(),
+		filter,
 		queryDto.Page,
 		queryDto.Limit,
 	)
+
 	if err != nil {
 		middleware.HandleError(c, middleware.NewAppError(
 			middleware.ErrorCodeInternalServer,
@@ -53,7 +90,6 @@ func (h *OrganizationHandler) ListOrganizations(c *gin.Context) {
 		return
 	}
 
-	// Prepare response
 	response := gin.H{
 		"items":          organizations,
 		"page":           queryDto.Page,
@@ -61,7 +97,13 @@ func (h *OrganizationHandler) ListOrganizations(c *gin.Context) {
 		"total":          total,
 		"totalPages":     (total + int64(queryDto.Limit) - 1) / int64(queryDto.Limit),
 		"includeDeleted": queryDto.IncludeDeleted,
+		"isScoped":       !rbacContext.IsGlobalAdmin, // Indicate if results are scoped
 	}
+
+	logger.Log.Info("Organizations listed successfully",
+		zap.String("user_id", rbacContext.UserID),
+		zap.Int64("total_found", total),
+		zap.Bool("is_scoped", !rbacContext.IsGlobalAdmin))
 
 	c.JSON(http.StatusOK, response)
 }

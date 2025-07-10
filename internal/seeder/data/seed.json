@@ -3,13 +3,123 @@
     { "resource": "users", "action": "read", "description": "Read users" },
     { "resource": "users", "action": "list", "description": "List users" },
     { "resource": "users", "action": "create", "description": "Create users" },
+    { "resource": "users", "action": "delete", "description": "Delete users" },
     { "resource": "roles", "action": "read", "description": "Read roles" },
     { "resource": "roles", "action": "list", "description": "List roles" },
     { "resource": "roles", "action": "create", "description": "Create roles" },
+    { "resource": "roles", "action": "delete", "description": "Delete roles" },
+    {
+      "resource": "permissions",
+      "action": "read",
+      "description": "Read permissions"
+    },
+    {
+      "resource": "permissions",
+      "action": "list",
+      "description": "List permissions"
+    },
+    {
+      "resource": "permissions",
+      "action": "create",
+      "description": "Create permissions"
+    },
+    {
+      "resource": "permissions",
+      "action": "update",
+      "description": "Update permissions"
+    },
+    {
+      "resource": "permissions",
+      "action": "delete",
+      "description": "Delete permissions"
+    },
+    {
+      "resource": "organizations",
+      "action": "read",
+      "description": "Read organizations"
+    },
+    {
+      "resource": "organizations",
+      "action": "list",
+      "description": "List organizations"
+    },
+    {
+      "resource": "organizations",
+      "action": "create",
+      "description": "Create organizations"
+    },
     {
       "resource": "organizations",
       "action": "update",
-      "description": "Update organization status"
+      "description": "Update organizations"
+    },
+    {
+      "resource": "organizations",
+      "action": "delete",
+      "description": "Delete organizations"
+    },
+    {
+      "resource": "locations",
+      "action": "read",
+      "description": "Read locations"
+    },
+    {
+      "resource": "locations",
+      "action": "list",
+      "description": "List locations"
+    },
+    {
+      "resource": "locations",
+      "action": "create",
+      "description": "Create locations"
+    },
+    {
+      "resource": "locations",
+      "action": "update",
+      "description": "Update locations"
+    },
+    {
+      "resource": "locations",
+      "action": "delete",
+      "description": "Delete locations"
+    }
+  ],
+  "organizations": [
+    {
+      "name": "WeCare Holidays Platform",
+      "slug": "wecare-platform",
+      "type": "PLATFORM",
+      "email": "platform@wecareholidays.com",
+      "phone": "+918617662584",
+      "website": "https://platform.wecareholidays.com",
+      "taxIds": ["GST123456789", "PAN1234567890"],
+      "logo": "",
+      "address": {
+        "street": "123 Platform Street, Tech Tower",
+        "city": "Siliguri",
+        "state": "West Bengal",
+        "country": "India",
+        "pincode": "734001"
+      },
+      "status": "Approved"
+    },
+    {
+      "name": "Demo Supplier Company",
+      "slug": "demo-supplier",
+      "type": "SUPPLIER",
+      "email": "contact@demosupplier.com",
+      "phone": "+911234567890",
+      "website": "https://demosupplier.com",
+      "taxIds": ["GST987654321", "PAN9876543210"],
+      "logo": "",
+      "address": {
+        "street": "456 Supplier Avenue, Business Complex",
+        "city": "Siliguri",
+        "state": "West Bengal",
+        "country": "India",
+        "pincode": "734002"
+      },
+      "status": "Approved"
     }
   ],
   "roles": [
@@ -25,8 +135,21 @@
       "permissions": [
         "users:read",
         "users:create",
+        "users:list",
+        "users:delete",
         "roles:read",
-        "roles:create"
+        "roles:create",
+        "roles:list",
+        "roles:delete",
+        "permissions:read",
+        "organizations:read",
+        "organizations:list",
+        "organizations:update",
+        "locations:read",
+        "locations:list",
+        "locations:create",
+        "locations:update",
+        "locations:delete"
       ],
       "scope": "organization"
     }
@@ -39,7 +162,8 @@
       "password": "superAdmin@2025",
       "role": "PLATFORM_ADMIN",
       "status": "active",
-      "profilePhotoUrl": ""
+      "profilePhotoUrl": "",
+      "organizationSlug": "wecare-platform"
     },
     {
       "fullName": "Supplier User",
@@ -48,7 +172,8 @@
       "password": "supplier@2025",
       "role": "SUPPLIER",
       "status": "active",
-      "profilePhotoUrl": ""
+      "profilePhotoUrl": "",
+      "organizationSlug": "demo-supplier"
     }
   ]
 }

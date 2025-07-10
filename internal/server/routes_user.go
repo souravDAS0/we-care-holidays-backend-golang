@@ -23,5 +23,5 @@ func registerUserRoutes(router *gin.RouterGroup, app *container.AppContainer) {
 		app.User.FindUserByEmailUsecase,
 	)
 
-	userRoutes.RegisterUserRoutes(router, userHandler)
+	userRoutes.RegisterUserRoutes(router, userHandler, app)
 }

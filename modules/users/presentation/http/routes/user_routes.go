@@ -1,13 +1,17 @@
 package routes
 
 import (
+	"bitbucket.org/abhishek_fordel/we-care-holidays-backend-golang/container"
 	"bitbucket.org/abhishek_fordel/we-care-holidays-backend-golang/internal/constants"
+	"bitbucket.org/abhishek_fordel/we-care-holidays-backend-golang/internal/middleware"
 	"bitbucket.org/abhishek_fordel/we-care-holidays-backend-golang/modules/users/presentation/http/handlers"
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterUserRoutes(router *gin.RouterGroup, handler *handlers.UserHandler) {
+func RegisterUserRoutes(router *gin.RouterGroup, handler *handlers.UserHandler, app *container.AppContainer) {
 	userGroup := router.Group(constants.UserBasePath)
+
+	userGroup.Use(middleware.AutoGuard(app.RBACService))
 	{
 		userGroup.GET(constants.ListUsersPath, handler.ListUsers)
 		userGroup.POST(constants.CreateUserPath, handler.CreateUser)

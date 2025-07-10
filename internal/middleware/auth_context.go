@@ -31,6 +31,10 @@ type Permission struct {
 	Action   string `json:"action"`
 }
 
+func (p Permission) String() string {
+	return p.Resource + ":" + p.Action
+}
+
 func GetAuthContext(ctx context.Context) *AuthContext {
 	if authCtx, ok := ctx.Value("auth_context").(*AuthContext); ok {
 		return authCtx

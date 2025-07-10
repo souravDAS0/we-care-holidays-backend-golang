@@ -11,9 +11,33 @@ import (
 
 // SeedData represents the entire seed.json structure
 type SeedData struct {
-	Roles       []RoleSeed       `json:"roles"`
-	Permissions []PermissionSeed `json:"permissions"`
-	Users       []UserSeed       `json:"users"`
+	Permissions   []PermissionSeed   `json:"permissions"`
+	Organizations []OrganizationSeed `json:"organizations"`
+	Roles         []RoleSeed         `json:"roles"`
+	Users         []UserSeed         `json:"users"`
+}
+
+// OrganizationSeed represents an organization record in seed.json
+type OrganizationSeed struct {
+	Name    string      `json:"name"`
+	Slug    string      `json:"slug"`
+	Type    string      `json:"type"`
+	Email   string      `json:"email"`
+	Phone   string      `json:"phone"`
+	Website string      `json:"website"`
+	TaxIDs  []string    `json:"taxIds"`
+	Logo    string      `json:"logo"`
+	Address AddressSeed `json:"address"`
+	Status  string      `json:"status"`
+}
+
+// AddressSeed represents address data in seed.json
+type AddressSeed struct {
+	Street  string `json:"street"`
+	City    string `json:"city"`
+	State   string `json:"state"`
+	Country string `json:"country"`
+	Pincode string `json:"pincode"`
 }
 
 // RoleSeed represents a role record in seed.json
@@ -22,7 +46,6 @@ type RoleSeed struct {
 	Description string   `json:"description"`
 	Permissions []string `json:"permissions,omitempty"`
 	Scope       string   `json:"scope"`
-	// IsSystem    bool     `json:"isSystem"`
 }
 
 // PermissionSeed represents a permission record in seed.json
@@ -33,14 +56,14 @@ type PermissionSeed struct {
 }
 
 type UserSeed struct {
-	FullName        string      `json:"fullName"` // FIXED: was "name" in JSON
-	Phones          []PhoneSeed `json:"phones"`
-	Emails          []EmailSeed `json:"emails"`
-	ProfilePhotoURL string      `json:"profilePhotoUrl"`          // FIXED: JSON tag
-	Role            string      `json:"role"`                     // FIXED: JSON tag
-	Status          string      `json:"status"`                   // FIXED: JSON tag
-	Password        string      `json:"password"`                 // Added for seed data
-	OrganizationID  string      `json:"organizationId,omitempty"` // FIXED: JSON tag
+	FullName         string      `json:"fullName"`
+	Phones           []PhoneSeed `json:"phones"`
+	Emails           []EmailSeed `json:"emails"`
+	ProfilePhotoURL  string      `json:"profilePhotoUrl"`
+	Role             string      `json:"role"`
+	Status           string      `json:"status"`
+	Password         string      `json:"password"`
+	OrganizationSlug string      `json:"organizationSlug"` // Changed from ID to slug for easier reference
 }
 
 // PhoneSeed represents user phone
