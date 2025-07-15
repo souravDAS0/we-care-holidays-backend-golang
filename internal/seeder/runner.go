@@ -251,6 +251,7 @@ func seedRoles(ctx context.Context, appContainer *container.AppContainer, roles 
 			CreatedAt:   time.Now(),
 			UpdatedAt:   time.Now(),
 			IsSystem:    true,
+			CreatedBy:   "system",
 		}
 
 		if err := appContainer.Role.CreateRoleUseCase.Execute(ctx, role); err != nil {
